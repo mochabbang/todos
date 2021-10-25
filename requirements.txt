@@ -1,0 +1,7 @@
+
+# requirements.txt
+
+Django # Django
+djangorestframework  # Django REST API Server
+drf-yasg # swagger API
+django-extensions  # shell_plus
