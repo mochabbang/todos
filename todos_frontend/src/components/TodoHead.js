@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useTodoState } from '../TodoContext';
 
 /* 스타일 구성 */
 const TodoHeadBlock = styled.div`
@@ -57,12 +58,14 @@ const GetDay = weekDay => {
 
 function TodoHead() {
     const { todayYMD, todayDay } = TodoGetDays();
+    const todos = useTodoState();
+    const undoneTasks = todos.filter(todo => !todo.done);
 
     return (
         <TodoHeadBlock>
             <h1>{ todayYMD }</h1>
             <div className="day">{ todayDay }</div>
-            <div className="tasks-left">할 일 2개 남음</div>
+            <div className="tasks-left">할 일 { undoneTasks.length }개 남음</div>
         </TodoHeadBlock>
     );
 }
