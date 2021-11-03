@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md'
+import { useTodoDispatch, useTodoNextId } from '../TodoContext';
 
 const CircleButton = styled.button`
     background: #38d9a9;
@@ -51,6 +52,7 @@ const InsertFormPositioner = styled.div`
     width: 100%;
     bottom: 0;
     left: 0;
+    height:30%;
     position: absolute;
 `;
 
@@ -64,6 +66,7 @@ const InsertForm = styled.form`
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
     border-top: 1px solid #e9ecef;
+    height: -webkit-fill-available;
 `;
 
 const Input = styled.input`
@@ -78,16 +81,42 @@ const Input = styled.input`
 
 function TodoCreate() {
     const [open, setOpen] = useState(false);
-    
+    const [value, setValue] = useState('');
+
+    const dispatch = useTodoDispatch()
+    const nextId = useTodoNextId()
+
     const onToggle = () => setOpen(!open);
+    const onChange = e => setValue(e.target.value);
+    const onSubmit = e => {
+        e.preventDefault()
+        dispatch({
+            type: "CREATE",
+            todo: {
+                id: nextId.current,
+                title: value,
+                done: false
+            }
+        });
+
+        setValue('');
+        setOpen(false);
+        nextId.current += 1;
+
+    }
 
     return (
         <>
             {
                 open && (
                     <InsertFormPositioner>
-                        <InsertForm>
-                            <Input autoFocus placeholder="할 일을 입력 후, Enter를 누르세요" />
+                        <InsertForm onSubmit={onSubmit}>
+                            <Input 
+                                autoFocus
+                                placeholder="할 일을 입력 후, Enter를 누르세요" 
+                                onChange={onChange}
+                                value={value}
+                            />
                         </InsertForm>
                     </InsertFormPositioner>
                 )
@@ -99,4 +128,4 @@ function TodoCreate() {
     );
 }
 
-export default TodoCreate;
+export default React.memo(TodoCreate);

@@ -19,7 +19,7 @@ function TodoList() {
                     <TodoItem 
                         key={todo.id}
                         id={todo.id}
-                        text={todo.text} 
+                        title={todo.title} 
                         done={todo.done} /> 
                 ))
             }

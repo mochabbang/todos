@@ -3,22 +3,34 @@ import React, { createContext, useContext, useReducer, useRef } from 'react';
 const initialTodos = [
     {
         id: 1,
-        text: '프로젝트 생성하기',
+        title: '프로젝트 생성하기',
+        description: '프로젝트 생성 설명 블라블라',
+        author: 'Daniel',
+        due_date: '2021-11-05',
         done: true
     },
     {
         id: 2,
-        text: '컴포넌트 스타일링하기',
+        title: '컴포넌트 스타일링하기',
+        description: '컴포넌트 설명 블라블라',
+        author: 'Alex',
+        due_date: '2021-11-05',
         done: true
     },
     {
         id: 3,
-        text: 'Context 만들기',
+        title: 'Context 만들기',
+        description: 'Context 설명 블라블라',
+        author: 'Elsa',
+        due_date: '2021-11-07',
         done: false
     },
     {
         id: 4,
-        text: '기능 구현하기',
+        title: '기능 구현하기',
+        description: '기능 구현하기 설명 블라블라',
+        author: 'Que',
+        due_date: '2021-11-07',
         done: false
     }
 ];
