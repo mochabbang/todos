@@ -58,14 +58,22 @@ const GetDay = weekDay => {
 
 function TodoHead() {
     const { todayYMD, todayDay } = TodoGetDays();
-    const todos = useTodoState();
-    const undoneTasks = todos.filter(todo => !todo.done);
+    const todoState = useTodoState();
+    const {loading, todos, error} = todoState;    
+
+    //console.log(todos);
+
+    if (loading) return <div>로딩중..</div>;
+    if (error) return <div>에러가 발생하였습니다.</div>;
+    if (!todos) return null;
+
+    const undoneTasks = todos.filter(todo => !todo.completed);    
 
     return (
         <TodoHeadBlock>
             <h1>{ todayYMD }</h1>
             <div className="day">{ todayDay }</div>
-            <div className="tasks-left">할 일 { undoneTasks.length }개 남음</div>
+            <div className="tasks-left">할 일 {undoneTasks.length}개 남음</div>
         </TodoHeadBlock>
     );
 }

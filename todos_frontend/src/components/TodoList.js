@@ -10,7 +10,10 @@ const TodoListBlock = styled.div`
 `;
 
 function TodoList() {
-    const todos = useTodoState()
+    const todoState = useTodoState();
+    const { todos } = todoState;   
+
+    if (!todos) return null;
 
     return (
         <TodoListBlock>

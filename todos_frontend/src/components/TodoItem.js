@@ -40,7 +40,7 @@ const CheckCircle = styled.div`
     margin-right: 20px;
     cursor: pointer;
     ${
-        props => props.done && css`
+        props => props.completed && css`
             border: 1px solid #38d9a9;
             color: #38d9a9;
         `
@@ -52,23 +52,23 @@ const Title = styled.div`
     font-size: 21px;
     color: #495057;
     ${
-        props => props.done && css`
+        props => props.completed && css`
             color: #ced4da;
         `
     }
 `;
 
-function TodoItem({ id, done, title }) {
+function TodoItem({ id, completed, title }) {
     const dispatch = useTodoDispatch()
     const onToggle = () => dispatch({ type: 'TOGGLE', id });
     const onRemove = () => dispatch({ type: 'REMOVE', id });
 
     return (
         <TodoItemBlock>
-            <CheckCircle done={done} onClick={onToggle}>
-                {done && <MdDone />}
+            <CheckCircle completed={completed} onClick={onToggle}>
+                {completed && <MdDone />}
             </CheckCircle>
-            <Title done={done}>{title}</Title>
+            <Title completed={completed}>{title}</Title>
             <Remove onClick={onRemove}>
                 <MdDelete />
             </Remove>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import axios from 'axios';
 
 // const initialTodos = [
@@ -38,21 +38,39 @@ import axios from 'axios';
 
 const initialTodos = {
     loading: false,
-    data: [],
+    todos: null,
     error: null
 };
 
 function todoReducer(state, action) {
     switch (action.type) {
         case 'CREATE':
-            return state.concat(action.todo);
+            return state.todos.concat(action.todo);
         case 'TOGGLE':
-            return state.map(todo => todo.id === action.id ? {
+            return state.todos.map(todo => todo.id === action.id ? {
                 ...todo,
-                done: !todo.done
+                completed: !todo.completed
             } : todo);
         case 'REMOVE':
-            return state.filter(todo => todo.id !== action.id);
+            return state.todos.filter(todo => todo.id !== action.id);
+        case 'LOADING':
+            return {
+                loading: true,
+                todos: null,
+                error: null
+            };
+        case 'SUCCESS':
+            return {
+                loading: false,
+                todos: action.todos,
+                error: null
+            };
+        case 'ERROR':
+            return {
+                loading: false,
+                todos: null,
+                error: action.error
+            }
         default:
             throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -65,6 +83,21 @@ const TodoNextIdContext = createContext()
 export function TodoProvider({ children }) {
     const [state, dispatch] = useReducer(todoReducer, initialTodos);
     const nextId = useRef(5);
+
+    const fetchTodos = async() => {
+        dispatch({type: 'LOADING'});
+        try {
+            const response = await axios.get('http://127.0.0.1:8080/api/todo/');
+                  
+            dispatch({type:'SUCCESS', todos: response.data});
+        } catch(e) {
+            dispatch({type: 'ERROR', error: e});
+        }
+    }
+
+    useEffect(() => {
+        fetchTodos();
+    }, []);
     
     return (
         <TodoStateContext.Provider value={state}>
