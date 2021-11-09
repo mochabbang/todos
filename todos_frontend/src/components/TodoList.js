@@ -23,7 +23,7 @@ function TodoList() {
                         key={todo.id}
                         id={todo.id}
                         title={todo.title} 
-                        done={todo.done} /> 
+                        completed={todo.completed} /> 
                 ))
             }
         </TodoListBlock>
