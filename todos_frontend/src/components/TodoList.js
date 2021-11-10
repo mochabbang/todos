@@ -21,9 +21,7 @@ function TodoList() {
                 todos.map(todo => (
                     <TodoItem 
                         key={todo.id}
-                        id={todo.id}
-                        title={todo.title} 
-                        completed={todo.completed} /> 
+                        todo={todo} /> 
                 ))
             }
         </TodoListBlock>
