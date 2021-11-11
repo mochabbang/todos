@@ -47,10 +47,7 @@ function todoReducer(state, action) {
         case 'CREATE':
             return state.todos.concat(action.todo);
         case 'TOGGLE':
-            return state.todos.map(todo => todo.id === action.id ? putToggle({
-                ...todo,
-                completed: !todo.completed
-            }) : todo);
+            return state.todos.map(todo => todo.id === action.id ? action.todo : todo);
         case 'REMOVE':
             return state.todos.filter(todo => todo.id !== action.id);
         case 'LOADING':
@@ -80,11 +77,6 @@ const TodoStateContext = createContext()
 const TodoDispatchContext = createContext()
 const TodoNextIdContext = createContext()
 
-const headers = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-}
-
 // 조회 함수
 const getTodos = async(dispatch) => {
     dispatch({type: 'LOADING'});
@@ -94,19 +86,6 @@ const getTodos = async(dispatch) => {
         dispatch({type:'SUCCESS', todos: response.data});
     } catch(e) {
         dispatch({type: 'ERROR', error: e});
-    }
-}
-
-const putToggle = async(toggleTodo) => {   
-
-    const response = await axios.put('http://127.0.0.1:8080/api/todo/' + toggleTodo.id + '/', toggleTodo, headers);
-
-    if (response.status === 200) {
-        return toggleTodo;
-    }
-    else {
-        alert("Error");
-        return toggleTodo;
     }
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { MdDone, MdDelete } from 'react-icons/md';
 import { useTodoDispatch } from '../TodoContext';
+import axios from 'axios';
 
 const Remove = styled.div`
     display: flex;
@@ -58,13 +59,35 @@ const Title = styled.div`
     }
 `;
 
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+}
+
+
 function TodoItem({ todo }) {    
 
     const {id, completed, title} = todo;
     const dispatch = useTodoDispatch()
-    const onToggle = () => dispatch({ type: 'TOGGLE', id });
-    const onRemove = () => dispatch({ type: 'REMOVE', id });
-   
+
+    const putToggle = async(todo) => {   
+
+        try {
+            const response = await axios.put('http://127.0.0.1:8080/api/todo/' + id + '/', { 
+                ...todo,
+                completed : !todo.completed
+            }, headers);
+
+            return { type: 'TOGGLE', id: id, todo: response.data };
+
+        } catch (err) {
+            return { type: 'ERROR', error: err };
+        }             
+    }
+
+    const onToggle = async () => {dispatch(await putToggle(todo))};
+    const onRemove = () => dispatch({ type: 'REMOVE', id });   
+    
     return (
         <TodoItemBlock>
             <CheckCircle completed={completed} onClick={onToggle}>
