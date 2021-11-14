@@ -85,7 +85,7 @@ function TodoItem({ todo }) {
         }             
     }
 
-    const onToggle = async () => {dispatch(await putToggle(todo))};
+    const onToggle = () => dispatch({ type: 'TOGGLE', id });
     const onRemove = () => dispatch({ type: 'REMOVE', id });   
     
     return (
