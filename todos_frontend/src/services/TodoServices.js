@@ -33,7 +33,9 @@ const putToggle = async(dispatch, id, todo) => {
 
 export default function TodoServices (dispatch) {
     return {
-        getData: () => getData(dispatch),
+        getData: () => {
+            return getData(dispatch)
+        },
         putToggle: (id, todo) => { 
             return putToggle(dispatch, id, todo);            
         } 

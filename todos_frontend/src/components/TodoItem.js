@@ -83,8 +83,8 @@ function TodoItem({ todo }) {
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch);
 
-    const onToggle = () => {
-        const response = todoService.putToggle(id, todo);
+    const onToggle = async () => {
+        const response = await todoService.putToggle(id, todo);
 
         if (response === 200) {
             todoService.getData(dispatch);
