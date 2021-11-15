@@ -1,6 +1,7 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useTodoState } from '../TodoContext';
+import { useTodoDispatch, useTodoState } from '../TodoContext';
 import TodoItem from './TodoItem';
 
 const TodoListBlock = styled.div`
@@ -9,11 +10,28 @@ const TodoListBlock = styled.div`
     overflow-y: auto;
 `;
 
+// 조회 함수
+const getTodos = async(dispatch) => {
+    dispatch({type: 'LOADING'});
+    try {
+        const response = await axios.get('http://127.0.0.1:8080/api/todo/');
+              
+        dispatch({type:'SUCCESS', todos: response.data});
+    } catch(e) {
+        dispatch({type: 'ERROR', error: e});
+    }
+}
+
 function TodoList() {
     const todoState = useTodoState();
+    const dispatch = useTodoDispatch();
     const { todos } = todoState;   
 
-    if (!todos) return null;
+    useEffect(() => {
+        getTodos(dispatch);
+    }, [dispatch]);
+
+    if (!todos) return null
 
     return (
         <TodoListBlock>

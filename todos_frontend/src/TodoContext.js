@@ -1,40 +1,4 @@
-import React, { createContext, useContext, useEffect, useReducer, useRef } from 'react';
-import axios from 'axios';
-
-// const initialTodos = [
-//     {
-//         id: 1,
-//         title: '프로젝트 생성하기',
-//         description: '프로젝트 생성 설명 블라블라',
-//         author: 'Daniel',
-//         due_date: '2021-11-05',
-//         done: true
-//     },
-//     {
-//         id: 2,
-//         title: '컴포넌트 스타일링하기',
-//         description: '컴포넌트 설명 블라블라',
-//         author: 'Alex',
-//         due_date: '2021-11-05',
-//         done: true
-//     },
-//     {
-//         id: 3,
-//         title: 'Context 만들기',
-//         description: 'Context 설명 블라블라',
-//         author: 'Elsa',
-//         due_date: '2021-11-07',
-//         done: false
-//     },
-//     {
-//         id: 4,
-//         title: '기능 구현하기',
-//         description: '기능 구현하기 설명 블라블라',
-//         author: 'Que',
-//         due_date: '2021-11-07',
-//         done: false
-//     }
-// ];
+import React, { createContext, useContext, useReducer, useRef } from 'react';
 
 const initialTodos = {
     loading: false,
@@ -46,11 +10,6 @@ function todoReducer(state, action) {
     switch (action.type) {
         case 'CREATE':
             return state.todos.concat(action.todo);
-        case 'TOGGLE':
-            return state.todos.map(todo => todo.id === action.id ? {
-                ...todo,
-                completed: !todo.completed
-            } : todo);
         case 'REMOVE':
             return state.todos.filter(todo => todo.id !== action.id);
         case 'LOADING':
@@ -80,25 +39,11 @@ const TodoStateContext = createContext()
 const TodoDispatchContext = createContext()
 const TodoNextIdContext = createContext()
 
-// 조회 함수
-const getTodos = async(dispatch) => {
-    dispatch({type: 'LOADING'});
-    try {
-        const response = await axios.get('http://127.0.0.1:8080/api/todo/');
-              
-        dispatch({type:'SUCCESS', todos: response.data});
-    } catch(e) {
-        dispatch({type: 'ERROR', error: e});
-    }
-}
-
 export function TodoProvider({ children }) {
     const [state, dispatch] = useReducer(todoReducer, initialTodos);
     const nextId = useRef(5);    
 
-    useEffect(() => {
-        getTodos(dispatch);
-    }, []);
+    
     
     return (
         <TodoStateContext.Provider value={state}>

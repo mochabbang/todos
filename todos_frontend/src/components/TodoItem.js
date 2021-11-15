@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { MdDone, MdDelete } from 'react-icons/md';
 import { useTodoDispatch } from '../TodoContext';
-import axios from 'axios';
+import TodoServices from '../services/TodoServices';
 
 const Remove = styled.div`
     display: flex;
@@ -59,33 +59,37 @@ const Title = styled.div`
     }
 `;
 
-const headers = {
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-}
+// const headers = {
+//     'Content-Type': 'application/json',
+//     'Accept': '*/*'
+// }
+
+// // 조회 함수
+// const getTodos = async(dispatch) => {
+//     dispatch({type: 'LOADING'});
+//     try {
+//         const response = await axios.get('http://127.0.0.1:8080/api/todo/');
+              
+//         dispatch({type:'SUCCESS', todos: response.data});
+//     } catch(e) {
+//         dispatch({type: 'ERROR', error: e});
+//     }
+// }
 
 
 function TodoItem({ todo }) {    
 
     const {id, completed, title} = todo;
     const dispatch = useTodoDispatch()
+    const todoService = TodoServices(dispatch);
 
-    const putToggle = async(todo) => {   
+    const onToggle = () => {
+        const response = todoService.putToggle(id, todo);
 
-        try {
-            const response = await axios.put('http://127.0.0.1:8080/api/todo/' + id + '/', { 
-                ...todo,
-                completed : !todo.completed
-            }, headers);
-
-            return { type: 'TOGGLE', id: id, todo: response.data };
-
-        } catch (err) {
-            return { type: 'ERROR', error: err };
-        }             
-    }
-
-    const onToggle = () => dispatch({ type: 'TOGGLE', id });
+        if (response === 200) {
+            todoService.getData(dispatch);
+        }
+    };
     const onRemove = () => dispatch({ type: 'REMOVE', id });   
     
     return (
