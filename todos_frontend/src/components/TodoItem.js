@@ -90,7 +90,7 @@ function TodoItem({ todo }) {
             todoService.getData(dispatch);
         }
     };
-    const onRemove = () => dispatch({ type: 'REMOVE', id });   
+    const onRemove = () => dispatch({ type: 'REMOVE', id }); 
     
     return (
         <TodoItemBlock>
