@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdDone, MdDelete } from 'react-icons/md';
 import { useTodoDispatch } from '../TodoContext';
 import TodoServices from '../services/TodoServices';
+import Modal from './modal/Modal';
 
 const Remove = styled.div`
     display: flex;
@@ -81,8 +82,13 @@ function TodoItem({ todo }) {
 
     const {id, completed, title} = todo;
     const dispatch = useTodoDispatch()
-    const todoService = TodoServices(dispatch);
+    const todoService = TodoServices(dispatch);    
+    // 모달 팝업
+    const onModal = () => {
+        
+    }
 
+    // 작업 여부 클릭
     const onToggle = async () => {
         const response = await todoService.putToggle(id, todo);
 
@@ -97,7 +103,9 @@ function TodoItem({ todo }) {
             <CheckCircle completed={completed} onClick={onToggle}>
                 {completed && <MdDone />}
             </CheckCircle>
-            <Title completed={completed}>{title}</Title>
+            <Title onClick={onModal} completed={completed}>
+                {title}                
+            </Title>
             <Remove onClick={onRemove}>
                 <MdDelete />
             </Remove>
