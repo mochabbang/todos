@@ -31,6 +31,12 @@ const ModalOverlay = styled.div`
     z-index: 999;
 `
 
+const ModalButton = styled.button`
+    outline: none;
+    cursor: pointer;
+    border: 0;
+`
+
 const ModalInner = styled.div`
     box-sizing: border-box;
     position: relative;
