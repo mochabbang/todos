@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { MdDone, MdDelete } from 'react-icons/md';
 import { useTodoDispatch } from '../TodoContext';
 import TodoServices from '../services/TodoServices';
-import Modal from './modal/Modal';
+import Modal from '../components/modal/Modal';
 
 const Remove = styled.div`
     display: flex;
@@ -60,32 +60,52 @@ const Title = styled.div`
     }
 `;
 
-// const headers = {
-//     'Content-Type': 'application/json',
-//     'Accept': '*/*'
-// }
+// 모달 styled 설정
+const ModalInput = styled.input`
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    box-sizing: border-box;
+`
+const ModalTextArea = styled.textarea`
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    width: 100%;
+    font-size: 1rem;
+    box-sizing: border-box;
+    height: 100%;
+    margin-top: 0.5rem;
+`
 
-// // 조회 함수
-// const getTodos = async(dispatch) => {
-//     dispatch({type: 'LOADING'});
-//     try {
-//         const response = await axios.get('http://127.0.0.1:8080/api/todo/');
-              
-//         dispatch({type:'SUCCESS', todos: response.data});
-//     } catch(e) {
-//         dispatch({type: 'ERROR', error: e});
-//     }
-// }
+const ModalDiv =styled.div`
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-top: 0.3rem;
+`
 
 
 function TodoItem({ todo }) {    
 
     const {id, completed, title} = todo;
     const dispatch = useTodoDispatch()
-    const todoService = TodoServices(dispatch);    
+    const todoService = TodoServices(dispatch); 
+    
+    const [modalOpen, setModalOpen] = useState(false);
+    
     // 모달 팝업
-    const onModal = () => {
-        
+    const openModal = () => {
+        setModalOpen(true);
+    }
+
+    const closeModal = () => {
+        setModalOpen(false);
     }
 
     // 작업 여부 클릭
@@ -99,17 +119,25 @@ function TodoItem({ todo }) {
     const onRemove = () => dispatch({ type: 'REMOVE', id }); 
     
     return (
-        <TodoItemBlock>
-            <CheckCircle completed={completed} onClick={onToggle}>
-                {completed && <MdDone />}
-            </CheckCircle>
-            <Title onClick={onModal} completed={completed}>
-                {title}                
-            </Title>
-            <Remove onClick={onRemove}>
-                <MdDelete />
-            </Remove>
-        </TodoItemBlock>
+        <>
+            <TodoItemBlock>
+                <CheckCircle completed={completed} onClick={onToggle}>
+                    {completed && <MdDone />}
+                </CheckCircle>
+                <Title onClick={openModal} completed={completed}>
+                    {title}                
+                </Title>
+                <Remove onClick={onRemove}>
+                    <MdDelete />
+                </Remove>
+            </TodoItemBlock>
+            {/* 모달 설정 */}
+            <Modal open={ modalOpen } close={ closeModal } >
+                <ModalInput value={title}></ModalInput>
+                <ModalTextArea>{todo.description}</ModalTextArea>
+                <ModalDiv>{todo.author}</ModalDiv>
+            </Modal>
+        </>
     );
 }
 
