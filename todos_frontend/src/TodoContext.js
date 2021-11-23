@@ -3,7 +3,6 @@ import React, { createContext, useContext, useReducer, useRef } from 'react';
 const initialTodos = {
     loading: false,
     todos: null,
-    visible: false,
     error: null
 };
 
@@ -13,10 +12,8 @@ function todoReducer(state, action) {
             return state.todos.concat(action.todo);
         case 'REMOVE':
             return state.todos.filter(todo => todo.id !== action.id);
-        case 'VISIBLE':
-            return {
-                loading: false,
-            }
+        case 'CHANGE_VALUE':
+            return action.title;
         case 'LOADING':
             return {
                 loading: true,

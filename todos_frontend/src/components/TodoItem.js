@@ -61,6 +61,13 @@ const Title = styled.div`
 `;
 
 // 모달 styled 설정
+const ModalFieldDiv = styled.div`
+    width: 20%;
+    margin-left: 0.3rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+`
+
 const ModalInput = styled.input`
     padding: 12px;
     border-radius: 4px;
@@ -69,6 +76,7 @@ const ModalInput = styled.input`
     outline: none;
     font-size: 1rem;
     box-sizing: border-box;
+    margin-top: 0.5rem;
 `
 const ModalTextArea = styled.textarea`
     padding: 12px;
@@ -81,24 +89,35 @@ const ModalTextArea = styled.textarea`
     margin-top: 0.5rem;
 `
 
-const ModalDiv =styled.div`
+const ModalTextDiv =styled.div`
     padding: 12px;
     border-radius: 4px;
     border: 1px solid #dee2e6;
     font-size: 1rem;
     box-sizing: border-box;
-    margin-top: 0.3rem;
+    margin-top: 0.5rem;
+    color: #ABABAB;
 `
-
-
+const ModalSelect = styled.select`
+    width: 150px;
+    height: 2.7rem;
+    background: url('https://freepikpsd.com/media/2019/10/down-arrow-icon-png-7-Transparent-Images.png') calc(100% - 5px) center no-repeat;
+    background-size: 20px;
+    padding: 5px 30px 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    outline: 0 none;
+    margin-top: 0.5rem;
+`
 function TodoItem({ todo }) {    
 
     const {id, completed, title} = todo;
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch); 
-    
+        
     const [modalOpen, setModalOpen] = useState(false);
-    
+    const [modalTitle, setModalTitle] = useState(title);
+
     // 모달 팝업
     const openModal = () => {
         setModalOpen(true);
@@ -117,6 +136,12 @@ function TodoItem({ todo }) {
         }
     };
     const onRemove = () => dispatch({ type: 'REMOVE', id }); 
+
+    const onChange = e => {
+        const { value } = e.target;
+        
+        setModalTitle(value);
+    }; 
     
     return (
         <>
@@ -133,9 +158,14 @@ function TodoItem({ todo }) {
             </TodoItemBlock>
             {/* 모달 설정 */}
             <Modal open={ modalOpen } close={ closeModal } >
-                <ModalInput value={title}></ModalInput>
+                <ModalInput onChange={onChange} value={modalTitle}></ModalInput>
                 <ModalTextArea>{todo.description}</ModalTextArea>
-                <ModalDiv>{todo.author}</ModalDiv>
+                <ModalTextDiv>{todo.author}</ModalTextDiv>
+                <ModalTextDiv>{todo.due_date}</ModalTextDiv>
+                <ModalSelect>
+                    <option value="true" >완료</option>
+                    <option value="false">미완료</option>
+                </ModalSelect>
             </Modal>
         </>
     );
