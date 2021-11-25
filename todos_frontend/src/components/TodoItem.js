@@ -61,13 +61,6 @@ const Title = styled.div`
 `;
 
 // 모달 styled 설정
-const ModalFieldDiv = styled.div`
-    width: 20%;
-    margin-left: 0.3rem;
-    font-size: 1rem;
-    box-sizing: border-box;
-`
-
 const ModalInput = styled.input`
     padding: 12px;
     border-radius: 4px;
@@ -111,37 +104,74 @@ const ModalSelect = styled.select`
 `
 function TodoItem({ todo }) {    
 
-    const {id, completed, title} = todo;
+    const {id, completed, title, description, author, due_date} = todo;
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch); 
         
     const [modalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState(title);
+    const [modalDescription, setDescription] = useState(description)
+    const [modalCompleted, setCompleted] = useState(completed)
 
     // 모달 팝업
     const openModal = () => {
         setModalOpen(true);
-    }
+    };
 
     const closeModal = () => {
         setModalOpen(false);
-    }
+        todoService.getData(dispatch); 
+    };
 
     // 작업 여부 클릭
     const onToggle = async () => {
-        const response = await todoService.putToggle(id, todo);
+        const response = await todoService.putData(id, {
+            ...todo,
+            completed: !todo.completed
+        });
 
-        if (response === 200) {
+        if (response.status === 200) {
             todoService.getData(dispatch);
         }
     };
-    const onRemove = () => dispatch({ type: 'REMOVE', id }); 
 
-    const onChange = e => {
-        const { value } = e.target;
+    const onEdit = async() => {
+        const response = await todoService.putData(id, {
+            ...todo,
+            title: modalTitle,
+            description: modalDescription,
+            completed: modalCompleted
+        });   
         
-        setModalTitle(value);
+        if (response.status === 200) {
+            alert("수정되었습니다.");          
+            setModalTitle(response.data.title);
+            setDescription(response.data.description);
+            setCompleted(response.data.completed);
+        }
+    };
+
+    const onRemove = async () => {
+        const response = await todoService.deleteData(id);
+
+        if(response.status === 200) {
+            alert("삭제되었습니다.");
+            todoService.getData(dispatch);
+        }
+        
+    };
+
+    const onTitleChange = e => {
+        setModalTitle(e.target.value);
     }; 
+
+    const onDescriptionChange = e => {
+        setDescription(e.target.value);
+    };
+
+    const onCompletedChange = e => {
+        setCompleted(e.target.value)
+    };
     
     return (
         <>
@@ -157,13 +187,13 @@ function TodoItem({ todo }) {
                 </Remove>
             </TodoItemBlock>
             {/* 모달 설정 */}
-            <Modal open={ modalOpen } close={ closeModal } >
-                <ModalInput onChange={onChange} value={modalTitle}></ModalInput>
-                <ModalTextArea>{todo.description}</ModalTextArea>
-                <ModalTextDiv>{todo.author}</ModalTextDiv>
-                <ModalTextDiv>{todo.due_date}</ModalTextDiv>
-                <ModalSelect>
-                    <option value="true" >완료</option>
+            <Modal open={ modalOpen } close={ closeModal } onEdit={onEdit} >
+                <ModalInput onChange={onTitleChange} value={modalTitle}></ModalInput>
+                <ModalTextArea onChange={onDescriptionChange} value={modalDescription}></ModalTextArea>
+                <ModalTextDiv>{author}</ModalTextDiv>
+                <ModalTextDiv>{due_date}</ModalTextDiv>
+                <ModalSelect onChange={onCompletedChange} value={modalCompleted}>
+                    <option value="true">완료</option>
                     <option value="false">미완료</option>
                 </ModalSelect>
             </Modal>
