@@ -47,6 +47,23 @@ const deleteData = async(dispatch, id) => {
     }             
 }
 
+const postData = async(dispatch, todo) => {   
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Accept': '*/*'
+    }
+
+    try {
+        const response = await axios.post(`http://127.0.0.1:8080/api/todo/`, todo, headers);
+
+        return response;
+
+    } catch (err) {
+        return dispatch({ type: 'ERROR', error: err });
+    }             
+}
+
 export default function TodoServices (dispatch) {
     return {
         getData: () => {
@@ -57,6 +74,9 @@ export default function TodoServices (dispatch) {
         },
         deleteData: (id) => {
             return deleteData(dispatch, id);
+        },
+        postData: (todo) => {
+            return postData(dispatch, todo);
         }
     }
 };

@@ -135,7 +135,7 @@ function TodoItem({ todo }) {
         }
     };
 
-    const onEdit = async() => {
+    const onSubmit = async() => {
         const response = await todoService.putData(id, {
             ...todo,
             title: modalTitle,
@@ -152,12 +152,17 @@ function TodoItem({ todo }) {
     };
 
     const onRemove = async () => {
-        const response = await todoService.deleteData(id);
 
-        if(response.status === 200) {
-            alert("삭제되었습니다.");
-            todoService.getData(dispatch);
+        if(window.confirm("삭제하시겠습니까?")) {
+            const response = await todoService.deleteData(id);
+
+            if(response.status === 204) {
+                alert("삭제되었습니다.");
+                todoService.getData(dispatch);
+            }
         }
+
+        
         
     };
 
@@ -187,11 +192,18 @@ function TodoItem({ todo }) {
                 </Remove>
             </TodoItemBlock>
             {/* 모달 설정 */}
-            <Modal open={ modalOpen } close={ closeModal } onEdit={onEdit} >
-                <ModalInput onChange={onTitleChange} value={modalTitle}></ModalInput>
-                <ModalTextArea onChange={onDescriptionChange} value={modalDescription}></ModalTextArea>
-                <ModalTextDiv>{author}</ModalTextDiv>
-                <ModalTextDiv>{due_date}</ModalTextDiv>
+            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} >
+                <ModalInput 
+                    onChange={onTitleChange} 
+                    value={modalTitle} 
+                    placeholderholder={'제목을 입력해주세요.'}
+                ></ModalInput>
+                <ModalTextArea 
+                    onChange={onDescriptionChange} 
+                    value={modalDescription}
+                    placeholder={"설명을 입력해주세요."}></ModalTextArea>
+                <ModalTextDiv placeholder={"작성자를 입력해주세요."}>{author}</ModalTextDiv>
+                <ModalTextDiv placeholder={"날짜를 입력해주세요."}>{due_date}</ModalTextDiv>
                 <ModalSelect onChange={onCompletedChange} value={modalCompleted}>
                     <option value="true">완료</option>
                     <option value="false">미완료</option>
