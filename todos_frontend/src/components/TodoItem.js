@@ -4,6 +4,10 @@ import { MdDone, MdDelete } from 'react-icons/md';
 import { useTodoDispatch } from '../TodoContext';
 import TodoServices from '../services/TodoServices';
 import Modal from '../components/modal/Modal';
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+registerLocale("ko");
 
 const Remove = styled.div`
     display: flex;
@@ -93,8 +97,7 @@ const ModalTextDiv =styled.div`
 `
 const ModalSelect = styled.select`
     width: 150px;
-    height: 2.7rem;
-    background: url('https://freepikpsd.com/media/2019/10/down-arrow-icon-png-7-Transparent-Images.png') calc(100% - 5px) center no-repeat;
+    height: 2.7rem;    
     background-size: 20px;
     padding: 5px 30px 5px 10px;
     border-radius: 4px;
@@ -102,6 +105,18 @@ const ModalSelect = styled.select`
     outline: 0 none;
     margin-top: 0.5rem;
 `
+
+const ModalDatePicker = styled(DatePicker)`
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+`
+
 function TodoItem({ todo }) {    
 
     const {id, completed, title, description, author, due_date} = todo;
@@ -112,6 +127,7 @@ function TodoItem({ todo }) {
     const [modalTitle, setModalTitle] = useState(title);
     const [modalDescription, setDescription] = useState(description)
     const [modalCompleted, setCompleted] = useState(completed)
+    const [modalDueDate, setDueDate] = useState(due_date)
 
     // 모달 팝업
     const openModal = () => {
@@ -135,6 +151,7 @@ function TodoItem({ todo }) {
         }
     };
 
+    // 저장 버튼
     const onSubmit = async() => {
         const response = await todoService.putData(id, {
             ...todo,
@@ -148,9 +165,13 @@ function TodoItem({ todo }) {
             setModalTitle(response.data.title);
             setDescription(response.data.description);
             setCompleted(response.data.completed);
+            setModalOpen(!modalOpen);
+
+            todoService.getData(dispatch);
         }
     };
 
+    //삭제
     const onRemove = async () => {
 
         if(window.confirm("삭제하시겠습니까?")) {
@@ -160,9 +181,7 @@ function TodoItem({ todo }) {
                 alert("삭제되었습니다.");
                 todoService.getData(dispatch);
             }
-        }
-
-        
+        }       
         
     };
 
@@ -177,6 +196,10 @@ function TodoItem({ todo }) {
     const onCompletedChange = e => {
         setCompleted(e.target.value)
     };
+
+    const onDueDateChange = e => {
+        setDueDate(e);
+    }
     
     return (
         <>
@@ -203,7 +226,7 @@ function TodoItem({ todo }) {
                     value={modalDescription}
                     placeholder={"설명을 입력해주세요."}></ModalTextArea>
                 <ModalTextDiv placeholder={"작성자를 입력해주세요."}>{author}</ModalTextDiv>
-                <ModalTextDiv placeholder={"날짜를 입력해주세요."}>{due_date}</ModalTextDiv>
+                <ModalDatePicker value={modalDueDate} onChange={onDueDateChange} locale="ko" dateFormat={"yyyy-MM-dd HH:mm:ss"} placeholder={"날짜를 입력해주세요."} ></ModalDatePicker>
                 <ModalSelect onChange={onCompletedChange} value={modalCompleted}>
                     <option value="true">완료</option>
                     <option value="false">미완료</option>

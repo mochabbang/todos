@@ -4,6 +4,10 @@ import { MdAdd } from 'react-icons/md'
 import { useTodoDispatch, useTodoNextId } from '../TodoContext';
 import Modal from './modal/Modal';
 import TodoServices from '../services/TodoServices';
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+registerLocale("ko");
 
 const CircleButton = styled.button`
     background: #38d9a9;
@@ -50,37 +54,6 @@ const CircleButton = styled.button`
     }
 `;
 
-// const InsertFormPositioner = styled.div`
-//     width: 100%;
-//     bottom: 0;
-//     left: 0;
-//     height:30%;
-//     position: absolute;
-// `;
-
-// const InsertForm = styled.form`
-//     background: #f8f9fa;
-//     padding-left: 32px;
-//     padding-top: 32px;
-//     padding-right: 32px;
-//     padding-bottom: 72px;
-
-//     border-bottom-left-radius: 16px;
-//     border-bottom-right-radius: 16px;
-//     border-top: 1px solid #e9ecef;
-//     height: -webkit-fill-available;
-// `;
-
-// const Input = styled.input`
-//     padding: 12px;
-//     border-radius: 4px;
-//     border: 1px solid #dee2e6;
-//     width: 100%;
-//     outline: none;
-//     font-size: 18px;
-//     box-sizing: border-box;
-// `;
-
 const ModalInput = styled.input`
     padding: 12px;
     border-radius: 4px;
@@ -91,6 +64,18 @@ const ModalInput = styled.input`
     box-sizing: border-box;
     margin-top: 0.5rem;
 `
+
+const ModalDatePicker = styled(DatePicker)`
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+`
+
 const ModalTextArea = styled.textarea`
     padding: 12px;
     border-radius: 4px;
@@ -104,8 +89,7 @@ const ModalTextArea = styled.textarea`
 
 const ModalSelect = styled.select`
     width: 150px;
-    height: 2.7rem;
-    background: url('https://freepikpsd.com/media/2019/10/down-arrow-icon-png-7-Transparent-Images.png') calc(100% - 5px) center no-repeat;
+    height: 2.7rem;    
     background-size: 20px;
     padding: 5px 30px 5px 10px;
     border-radius: 4px;
@@ -148,7 +132,7 @@ function TodoCreate() {
     };
 
     const onDueDateChange = e => {
-        setDueDate(e.target.value);
+        setDueDate(e);
     }
     
     const initState = () => {
@@ -188,10 +172,10 @@ function TodoCreate() {
     return (
         <>
             <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} >
-                <ModalInput onChange={onTitleChange} value={modalTitle}></ModalInput>
-                <ModalTextArea onChange={onDescriptionChange} value={modalDescription}></ModalTextArea>
-                <ModalInput onChange={onAuthorChange} value={modalAuthor}></ModalInput>
-                <ModalInput onChange={onDueDateChange} value={modalDueDate}></ModalInput>
+                <ModalInput onChange={onTitleChange} value={modalTitle} placeholder={"제목을 입력해주세요."}></ModalInput>
+                <ModalTextArea onChange={onDescriptionChange} value={modalDescription} placeholder={"설명을 입력해주세요."}></ModalTextArea>
+                <ModalInput onChange={onAuthorChange} value={modalAuthor} placeholder={"저자를 입력해주세요."}></ModalInput>
+                <ModalDatePicker selected={modalDueDate} onChange={onDueDateChange} locale="ko" dateFormat={"yyyy-MM-dd HH:mm:ss"} placeholderText={"날짜를 입력해주세요."} ></ModalDatePicker>
                 <ModalSelect onChange={onCompletedChange} value={modalCompleted}>
                     <option value="true">완료</option>
                     <option value="false">미완료</option>

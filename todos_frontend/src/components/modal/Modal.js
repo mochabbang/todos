@@ -1,5 +1,4 @@
 import React from 'react';
-import '../modal/modal.css';
 import styled, { css, keyframes } from 'styled-components';
 
 const modalShow = keyframes`
@@ -23,7 +22,7 @@ const modalBgShow = keyframes`
 `;
 
 const ModalBackGround = styled.div`
-    display: ${ ({open}) => open ? 'none' : 'flex' };
+    display: ${ ({open}) => !open ? 'none' : 'flex' };
     position: fixed;
     top: 0;
     right: 0;
@@ -46,7 +45,11 @@ const ModalSection = styled.section`
     margin: 0 auto;
     border-radius: .3rem;
     background-color: #fff;
-    animation: ${ modalShow } .3s;
+    ${
+        ({open}) => open && css`
+            animation: ${ modalShow } .3s;
+        `
+    }    
     overflow: hidden;
     
 `;
@@ -64,7 +67,13 @@ const ModalFooter = styled.footer`
     text-align: right;
 `;
 
-const ModalHeaderButton = styled.button`
+const ModalButton = styled.button`
+    outline: none;
+    cursor: pointer;
+    border: 0;
+`;
+
+const ModalHeaderButton = styled(ModalButton)`
     position: absolute;
     top: 15px;
     right: 15px;
@@ -76,7 +85,7 @@ const ModalHeaderButton = styled.button`
     background-color: transparent;
 `;
 
-const ModalFooterButton = styled.button`
+const ModalFooterButton = styled(ModalButton)`
     padding: 6px 12px;
     color: #fff;
     background-color: #6c757d;
@@ -89,29 +98,11 @@ const Modal = (props) => {
     const { open, close, onSubmit } = props;
 
     return (
-        // 모달이 열릴 때 openModal 클래스가 생성된다.
-        // <div className={ open ? 'openModal modal' : 'modal'}>
-        //     {
-        //         open ? (
-        //             <section>
-        //                 <header>
-        //                     <button className="close" onClick={close}>&times;</button>
-        //                 </header>
-        //                 <main>
-        //                     {props.children}
-        //                 </main>
-        //                 <footer>
-        //                     <button className="close" onClick={onSubmit}> save </button>
-        //                     &nbsp;<button className="close" onClick={close}> close </button>
-        //                 </footer>
-        //             </section>
-        //         ) : null
-        //     }
-        // </div>
-        <ModalBackGround>
+        // 모달이 열릴 때 openModal 클래스가 생성된다.        
+        <ModalBackGround open={open}>
             {
                 open ? (
-                    <ModalSection>
+                    <ModalSection open={open}>
                         <ModalHeader>
                             <ModalHeaderButton onClick={close}>&times;</ModalHeaderButton>                            
                         </ModalHeader>
@@ -120,7 +111,7 @@ const Modal = (props) => {
                         </ModalMain>
                         <ModalFooter>
                             <ModalFooterButton onClick={onSubmit}> save </ModalFooterButton>
-                            &nbsp;<ModalFooterButton onCLick={close}> close </ModalFooterButton>
+                            &nbsp;<ModalFooterButton onClick={close}> close </ModalFooterButton>
                         </ModalFooter>
                     </ModalSection>
                 ) : null
@@ -129,4 +120,4 @@ const Modal = (props) => {
     )
 }
 
-export default Modal;
+export default React.memo(Modal);
