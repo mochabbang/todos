@@ -198,6 +198,7 @@ function TodoItem({ todo }) {
     };
 
     const onDueDateChange = e => {
+        console.log(e);
         setDueDate(e);
     }
     
@@ -226,7 +227,7 @@ function TodoItem({ todo }) {
                     value={modalDescription}
                     placeholder={"설명을 입력해주세요."}></ModalTextArea>
                 <ModalTextDiv placeholder={"작성자를 입력해주세요."}>{author}</ModalTextDiv>
-                <ModalDatePicker value={modalDueDate} onChange={onDueDateChange} locale="ko" dateFormat={"yyyy-MM-dd HH:mm:ss"} placeholder={"날짜를 입력해주세요."} ></ModalDatePicker>
+                <ModalDatePicker value={modalDueDate} onChange={onDueDateChange} dateFormat={"yyyy-MM-dd HH:mm:ss"} ></ModalDatePicker>
                 <ModalSelect onChange={onCompletedChange} value={modalCompleted}>
                     <option value="true">완료</option>
                     <option value="false">미완료</option>
