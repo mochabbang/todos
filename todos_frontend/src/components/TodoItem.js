@@ -117,9 +117,16 @@ const ModalDatePicker = styled(DatePicker)`
     margin-top: 0.5rem;
 `
 
+function convertDateTime(date) {
+    return new Date(new Date(date).toISOString().slice(0, 19).replace('T', ' '));
+}
+
 function TodoItem({ todo }) {    
 
-    const {id, completed, title, description, author, due_date} = todo;
+    const [changeTodo , setChangeTodo] = useState(todo);
+
+    const {id, completed, title, description, author, due_date} = changeTodo;
+    
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch); 
         
@@ -127,7 +134,16 @@ function TodoItem({ todo }) {
     const [modalTitle, setModalTitle] = useState(title);
     const [modalDescription, setDescription] = useState(description)
     const [modalCompleted, setCompleted] = useState(completed)
-    const [modalDueDate, setDueDate] = useState(due_date)
+    const [modalDueDate, setDueDate] = useState(convertDateTime(due_date));
+
+    const handleChange = e => {
+        const {name, value} = e.target;
+        
+        setChangeTodo({
+            ...changeTodo,
+            [name]: value
+        });
+    };
 
     // 모달 팝업
     const openModal = () => {
@@ -153,12 +169,7 @@ function TodoItem({ todo }) {
 
     // 저장 버튼
     const onSubmit = async() => {
-        const response = await todoService.putData(id, {
-            ...todo,
-            title: modalTitle,
-            description: modalDescription,
-            completed: modalCompleted
-        });   
+        const response = await todoService.putData(id, changeTodo);   
         
         if (response.status === 200) {
             alert("수정되었습니다.");          
@@ -198,7 +209,6 @@ function TodoItem({ todo }) {
     };
 
     const onDueDateChange = e => {
-        console.log(e);
         setDueDate(e);
     }
     
@@ -218,17 +228,33 @@ function TodoItem({ todo }) {
             {/* 모달 설정 */}
             <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} >
                 <ModalInput 
-                    onChange={onTitleChange} 
-                    value={modalTitle} 
+                    onChange={handleChange} 
+                    name="title"
+                    value={title} 
                     placeholderholder={'제목을 입력해주세요.'}
                 ></ModalInput>
                 <ModalTextArea 
-                    onChange={onDescriptionChange} 
-                    value={modalDescription}
+                    onChange={handleChange} 
+                    name="description"
+                    value={description}
                     placeholder={"설명을 입력해주세요."}></ModalTextArea>
                 <ModalTextDiv placeholder={"작성자를 입력해주세요."}>{author}</ModalTextDiv>
-                <ModalDatePicker value={modalDueDate} onChange={onDueDateChange} dateFormat={"yyyy-MM-dd HH:mm:ss"} ></ModalDatePicker>
-                <ModalSelect onChange={onCompletedChange} value={modalCompleted}>
+                <ModalDatePicker 
+                    name="due_date"
+                    value={due_date}
+                    selected={due_date}
+                    onChange={handleChange}
+                    dateFormat={"yyyy-MM-dd HH:mm:ss"}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="time"
+                ></ModalDatePicker>
+                <ModalSelect 
+                    onChange={handleChange}
+                    name="completed"
+                    value={completed}
+                >
                     <option value="true">완료</option>
                     <option value="false">미완료</option>
                 </ModalSelect>
