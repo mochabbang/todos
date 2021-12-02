@@ -117,32 +117,27 @@ const ModalDatePicker = styled(DatePicker)`
     margin-top: 0.5rem;
 `
 
-function convertDateTime(date) {
-    return new Date(new Date(date).toISOString().slice(0, 19).replace('T', ' '));
-}
+// function convertDateTime(date) {
+//     return new Date(new Date(date).toISOString().slice(0, 19).replace('T', ' '));
+// }
 
 function TodoItem({ todo }) {    
 
-    const [changeTodo , setChangeTodo] = useState(todo);
-
-    const {id, completed, title, description, author, due_date} = changeTodo;
+    const {id, completed, title, description, author, due_date} = todo;
     
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch); 
         
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalTitle, setModalTitle] = useState(title);
-    const [modalDescription, setDescription] = useState(description)
-    const [modalCompleted, setCompleted] = useState(completed)
-    const [modalDueDate, setDueDate] = useState(convertDateTime(due_date));
+    // const [modalTitle, setModalTitle] = useState(title);
+    // const [modalDescription, setDescription] = useState(description)
+    // const [modalCompleted, setCompleted] = useState(completed)
+    // const [modalDueDate, setDueDate] = useState(convertDateTime(due_date));
 
     const handleChange = e => {
         const {name, value} = e.target;
         
-        setChangeTodo({
-            ...changeTodo,
-            [name]: value
-        });
+        
     };
 
     // 모달 팝업
@@ -169,13 +164,13 @@ function TodoItem({ todo }) {
 
     // 저장 버튼
     const onSubmit = async() => {
-        const response = await todoService.putData(id, changeTodo);   
+        const response = await todoService.putData(id, todo);   
         
         if (response.status === 200) {
             alert("수정되었습니다.");          
-            setModalTitle(response.data.title);
-            setDescription(response.data.description);
-            setCompleted(response.data.completed);
+            // setModalTitle(response.data.title);
+            // setDescription(response.data.description);
+            // setCompleted(response.data.completed);
             setModalOpen(!modalOpen);
 
             todoService.getData(dispatch);
@@ -196,21 +191,21 @@ function TodoItem({ todo }) {
         
     };
 
-    const onTitleChange = e => {
-        setModalTitle(e.target.value);
-    }; 
-
-    const onDescriptionChange = e => {
-        setDescription(e.target.value);
-    };
-
-    const onCompletedChange = e => {
-        setCompleted(e.target.value)
-    };
-
-    const onDueDateChange = e => {
-        setDueDate(e);
-    }
+    // const onTitleChange = e => {
+        // setModalTitle(e.target.value);
+    // }; 
+// 
+    // const onDescriptionChange = e => {
+        // setDescription(e.target.value);
+    // };
+// 
+    // const onCompletedChange = e => {
+        // setCompleted(e.target.value)
+    // };
+// 
+    // const onDueDateChange = e => {
+        // setDueDate(e);
+    // }
     
     return (
         <>

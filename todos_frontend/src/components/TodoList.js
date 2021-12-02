@@ -23,9 +23,8 @@ const getTodos = async(dispatch) => {
 }
 
 function TodoList() {
-    const todoState = useTodoState();
-    const dispatch = useTodoDispatch();
-    const { todos } = todoState;   
+    const { todos } = useTodoState();
+    const dispatch = useTodoDispatch(); 
 
     useEffect(() => {
         getTodos(dispatch);

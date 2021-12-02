@@ -8,12 +8,22 @@ const initialTodos = {
 
 function todoReducer(state, action) {
     switch (action.type) {
-        case 'CREATE':
-            return state.todos.concat(action.todo);
-        case 'REMOVE':
-            return state.todos.filter(todo => todo.id !== action.id);
-        case 'CHANGE_VALUE':
-            return action.title;
+        case 'CHANGE_VALUE': 
+            return state.todos.filter(todo => {
+                if (todo.id === action.todo.id) {
+                    return {
+                        ...todo,
+                        title: action.todo.title,
+                        description : action.todo.description,
+                        author: action.todo.author,
+                        due_date: action.todo.due_date,
+                        completed: action.todo.completed
+                    };
+                }
+                else {
+                    return todo;
+                }
+            });        
         case 'LOADING':
             return {
                 loading: true,
