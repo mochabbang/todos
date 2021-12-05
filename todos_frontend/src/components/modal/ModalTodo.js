@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -58,39 +58,55 @@ const ModalDatePicker = styled(DatePicker)`
     margin-top: 0.5rem;
 `
 
-function ModalTodo(props) {
+function ModalTodo({todo}) {
+    const [todoValues, setTodoValues] = useState(todo);
+    const {completed, title, description, author, due_date} = todoValues;   
+
+    const handleChange = e => {
+        const {name, value} = e.target;
+        setTodoValues({
+            ...todoValues,
+            [name]: value
+        });
+    }
+    
     return (
-        <ModalInput 
-                    onChange={handleChange} 
-                    name="title"
-                    value={title} 
-                    placeholderholder={'제목을 입력해주세요.'}
-                ></ModalInput>
-                <ModalTextArea 
-                    onChange={handleChange} 
-                    name="description"
-                    value={description}
-                    placeholder={"설명을 입력해주세요."}></ModalTextArea>
-                <ModalTextDiv placeholder={"작성자를 입력해주세요."}>{author}</ModalTextDiv>
-                <ModalDatePicker 
-                    name="due_date"
-                    value={due_date}
-                    selected={due_date}
-                    onChange={handleChange}
-                    dateFormat={"yyyy-MM-dd HH:mm:ss"}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    timeCaption="time"
-                ></ModalDatePicker>
-                <ModalSelect 
-                    onChange={handleChange}
-                    name="completed"
-                    value={completed}
-                >
-                    <option value="true">완료</option>
-                    <option value="false">미완료</option>
-                </ModalSelect>
+      <>
+        <ModalInput
+          onChange={handleChange}
+          name="title"
+          value={title}
+          placeholderholder={"제목을 입력해주세요."}
+        ></ModalInput>
+        <ModalTextArea
+          onChange={handleChange}
+          name="description"
+          value={description}
+          placeholder={"설명을 입력해주세요."}
+        ></ModalTextArea>
+        <ModalTextDiv placeholder={"작성자를 입력해주세요."}>
+          {author}
+        </ModalTextDiv>
+        <ModalDatePicker
+          name="due_date"
+          value={due_date}
+          selected={due_date}
+          onChange={handleChange}
+          dateFormat={"yyyy-MM-dd HH:mm:ss"}
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          timeCaption="time"
+        ></ModalDatePicker>
+        <ModalSelect
+          onChange={handleChange}
+          name="completed"
+          value={completed}
+        >
+          <option value="true">완료</option>
+          <option value="false">미완료</option>
+        </ModalSelect>
+      </>
     );
 }
 

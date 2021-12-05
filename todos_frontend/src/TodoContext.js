@@ -9,21 +9,14 @@ const initialTodos = {
 function todoReducer(state, action) {
     switch (action.type) {
         case 'CHANGE_VALUE': 
-            return state.todos.filter(todo => {
-                if (todo.id === action.todo.id) {
-                    return {
-                        ...todo,
-                        title: action.todo.title,
-                        description : action.todo.description,
-                        author: action.todo.author,
-                        due_date: action.todo.due_date,
-                        completed: action.todo.completed
-                    };
-                }
-                else {
-                    return todo;
-                }
-            });        
+            return {
+                ...action.todo,
+                title: action.todo.title,
+                description : action.todo.description,
+                author: action.todo.author,
+                due_date: action.todo.due_date,
+                completed: action.todo.completed
+            };        
         case 'LOADING':
             return {
                 loading: true,
