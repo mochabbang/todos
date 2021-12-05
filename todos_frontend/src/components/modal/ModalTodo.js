@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -58,17 +58,20 @@ const ModalDatePicker = styled(DatePicker)`
     margin-top: 0.5rem;
 `
 
-function ModalTodo({todo}) {
-    const [todoValues, setTodoValues] = useState(todo);
-    const {completed, title, description, author, due_date} = todoValues;   
+function ModalTodo({todo, handleChange}) {    
+    const {completed, title, description, author, due_date} = todo;   
 
-    const handleChange = e => {
-        const {name, value} = e.target;
-        setTodoValues({
-            ...todoValues,
-            [name]: value
-        });
-    }
+    useEffect(() => {
+        console.log(todo);        
+    }, [todo]);
+
+    // const handleChange = e => {
+    //     const {name, value} = e.target;
+    //     setTodoValues({
+    //         ...todoValues,
+    //         [name]: value
+    //     });
+    // }
     
     return (
       <>

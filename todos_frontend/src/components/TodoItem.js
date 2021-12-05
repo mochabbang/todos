@@ -74,7 +74,8 @@ function TodoItem({ todo }) {
     // const [modalDescription, setDescription] = useState(description)
     // const [modalCompleted, setCompleted] = useState(completed)
     // const [modalDueDate, setDueDate] = useState(convertDateTime(due_date));
-    const {id, completed, title} = todo;   
+    const {id, completed, title} = todo;  
+    const [changeTodo, setChangeTodo] = useState(todo); 
     
 
     // 모달 팝업
@@ -128,6 +129,14 @@ function TodoItem({ todo }) {
         
     };
 
+    const handleChange = e => {
+        const {name, value} = e.target;
+        setChangeTodo({
+            ...changeTodo,
+            [name]: value
+        });
+    }
+
     // const onTitleChange = e => {
         // setModalTitle(e.target.value);
     // }; 
@@ -158,7 +167,7 @@ function TodoItem({ todo }) {
                 </Remove>
             </TodoItemBlock>
             {/* 모달 설정 */}
-            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} todo={todo} ></Modal>
+            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} todo={changeTodo} handleChange={handleChange} ></Modal>
         </>
     );
 }
