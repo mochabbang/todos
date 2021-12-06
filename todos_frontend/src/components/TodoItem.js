@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdDone, MdDelete } from 'react-icons/md';
-import { useTodoDispatch } from '../TodoContext';
+import { useTodoDispatch, useTodoState } from '../TodoContext';
 import TodoServices from '../services/TodoServices';
 import Modal from '../components/modal/ModalTest';
 
@@ -68,6 +68,7 @@ const Title = styled.div`
 function TodoItem({ todo }) {            
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch); 
+    const { todos } = useTodoState(); 
         
     const [modalOpen, setModalOpen] = useState(false);
     // const [modalTitle, setModalTitle] = useState(title);
@@ -131,10 +132,10 @@ function TodoItem({ todo }) {
 
     const handleChange = e => {
         const {name, value} = e.target;
-        setChangeTodo({
+        setChangeTodo(todos.map((todo) => (todo.id === id) ? {
             ...changeTodo,
             [name]: value
-        });
+        } : todo));
     }
 
     // const onTitleChange = e => {
@@ -167,7 +168,7 @@ function TodoItem({ todo }) {
                 </Remove>
             </TodoItemBlock>
             {/* 모달 설정 */}
-            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} todo={changeTodo} handleChange={handleChange} ></Modal>
+            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} todo={changeTodo} onChange={handleChange} ></Modal>
         </>
     );
 }
