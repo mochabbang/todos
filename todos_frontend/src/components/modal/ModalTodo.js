@@ -58,22 +58,26 @@ const ModalDatePicker = styled(DatePicker)`
     margin-top: 0.5rem;
 `
 
+function convertDateTime(date) {
+    return new Date(new Date(date).toISOString().slice(0, 19).replace('T', ' '));
+}
+
 function ModalTodo({todo, handleChange}) {    
-    //const [changeTodo, setChangeTodo] = useState(todo);
     const {completed, title, description, author, due_date} = todo;   
+    const changeDueDate = convertDateTime(due_date);
 
   return (
       <>
         <ModalInput
           onChange={handleChange}
           name="title"
-          value={title}
+          defaultValue={title}
           placeholderholder={"제목을 입력해주세요."}
         ></ModalInput>
         <ModalTextArea
           onChange={handleChange}
           name="description"
-          value={description}
+          defaultValue={description}
           placeholder={"설명을 입력해주세요."}
         ></ModalTextArea>
         <ModalTextDiv placeholder={"작성자를 입력해주세요."}>
@@ -81,8 +85,8 @@ function ModalTodo({todo, handleChange}) {
         </ModalTextDiv>
         <ModalDatePicker
           name="due_date"
-          value={due_date}
-          selected={due_date}
+          value={changeDueDate}
+          selected={changeDueDate}
           onChange={handleChange}
           dateFormat={"yyyy-MM-dd HH:mm:ss"}
           showTimeSelect
@@ -93,7 +97,7 @@ function ModalTodo({todo, handleChange}) {
         <ModalSelect
           onChange={handleChange}
           name="completed"
-          value={completed}
+          defaultValue={completed}
         >
           <option value="true">완료</option>
           <option value="false">미완료</option>

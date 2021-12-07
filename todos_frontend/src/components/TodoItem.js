@@ -71,10 +71,6 @@ function TodoItem({ todo }) {
     const { todos } = useTodoState(); 
         
     const [modalOpen, setModalOpen] = useState(false);
-    // const [modalTitle, setModalTitle] = useState(title);
-    // const [modalDescription, setDescription] = useState(description)
-    // const [modalCompleted, setCompleted] = useState(completed)
-    // const [modalDueDate, setDueDate] = useState(convertDateTime(due_date));
     const {id, completed, title} = todo;  
     const [changeTodo, setChangeTodo] = useState(todo); 
     
@@ -103,13 +99,12 @@ function TodoItem({ todo }) {
 
     // 저장 버튼
     const onSubmit = async() => {
-        const response = await todoService.putData(id, todo);   
+        console.log(changeTodo);
+
+        const response = await todoService.putData(id, changeTodo);   
         
         if (response.status === 200) {
             alert("수정되었습니다.");          
-            // setModalTitle(response.data.title);
-            // setDescription(response.data.description);
-            // setCompleted(response.data.completed);
             setModalOpen(!modalOpen);
 
             todoService.getData(dispatch);
@@ -132,27 +127,12 @@ function TodoItem({ todo }) {
 
     const handleChange = e => {
         const {name, value} = e.target;
-        setChangeTodo(todos.map((todo) => (todo.id === id) ? {
-            ...changeTodo,
+        todos.map((todo) => (todo.id === id) ? setChangeTodo({
+            ...todo,
             [name]: value
-        } : todo));
+        }) : todo);
+        
     }
-
-    // const onTitleChange = e => {
-        // setModalTitle(e.target.value);
-    // }; 
-// 
-    // const onDescriptionChange = e => {
-        // setDescription(e.target.value);
-    // };
-// 
-    // const onCompletedChange = e => {
-        // setCompleted(e.target.value)
-    // };
-// 
-    // const onDueDateChange = e => {
-        // setDueDate(e);
-    // }
     
     return (
         <>
