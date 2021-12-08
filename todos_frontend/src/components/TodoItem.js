@@ -68,8 +68,6 @@ const Title = styled.div`
 function TodoItem({ todo }) {            
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch); 
-    const { todos } = useTodoState(); 
-        
     const [modalOpen, setModalOpen] = useState(false);
     const {id, completed, title} = todo;  
     const [changeTodo, setChangeTodo] = useState(todo); 
@@ -126,12 +124,12 @@ function TodoItem({ todo }) {
     };
 
     const handleChange = e => {
-        const {name, value} = e.target;
-        todos.map((todo) => (todo.id === id) ? setChangeTodo({
+        const {name, value} = e.target;  
+
+        setChangeTodo({
             ...todo,
             [name]: value
-        }) : todo);
-        
+        });
     }
     
     return (
@@ -148,7 +146,7 @@ function TodoItem({ todo }) {
                 </Remove>
             </TodoItemBlock>
             {/* 모달 설정 */}
-            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} todo={changeTodo} onChange={handleChange} ></Modal>
+            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} todo={todo} handleChange={handleChange} ></Modal>
         </>
     );
 }
