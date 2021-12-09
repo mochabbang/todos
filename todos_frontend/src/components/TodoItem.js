@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdDone, MdDelete } from 'react-icons/md';
-import { useTodoDispatch, useTodoState } from '../TodoContext';
+import { useTodoDispatch } from '../TodoContext';
 import TodoServices from '../services/TodoServices';
-import Modal from '../components/modal/ModalTest';
-
+import Modal from '../components/modal/Modal';
 
 const Remove = styled.div`
     display: flex;
@@ -61,10 +60,6 @@ const Title = styled.div`
     }
 `;
 
-// function convertDateTime(date) {
-//     return new Date(new Date(date).toISOString().slice(0, 19).replace('T', ' '));
-// }
-
 function TodoItem({ todo }) {            
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch); 
@@ -97,8 +92,6 @@ function TodoItem({ todo }) {
 
     // 저장 버튼
     const onSubmit = async() => {
-        console.log(changeTodo);
-
         const response = await todoService.putData(id, changeTodo);   
         
         if (response.status === 200) {
@@ -146,7 +139,14 @@ function TodoItem({ todo }) {
                 </Remove>
             </TodoItemBlock>
             {/* 모달 설정 */}
-            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} todo={todo} handleChange={handleChange} ></Modal>
+            <Modal 
+                open={ modalOpen }
+                close={ closeModal }
+                onSubmit={onSubmit}
+                todo={todo} 
+                handleChange={handleChange} 
+                gubun={"U"} 
+            ></Modal>
         </>
     );
 }

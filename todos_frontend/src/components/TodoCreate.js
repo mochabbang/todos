@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md'
-import { useTodoDispatch, useTodoNextId } from '../TodoContext';
+import { useTodoDispatch } from '../TodoContext';
 import Modal from './modal/Modal';
 import TodoServices from '../services/TodoServices';
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
-registerLocale("ko");
 
 const CircleButton = styled.button`
     background: #38d9a9;
@@ -54,50 +50,6 @@ const CircleButton = styled.button`
     }
 `;
 
-const ModalInput = styled.input`
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #dee2e6;
-    width: 100%;
-    outline: none;
-    font-size: 1rem;
-    box-sizing: border-box;
-    margin-top: 0.5rem;
-`
-
-const ModalDatePicker = styled(DatePicker)`
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #dee2e6;
-    width: 100%;
-    outline: none;
-    font-size: 1rem;
-    box-sizing: border-box;
-    margin-top: 0.5rem;
-`
-
-const ModalTextArea = styled.textarea`
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #dee2e6;
-    width: 100%;
-    font-size: 1rem;
-    box-sizing: border-box;
-    height: 100%;
-    margin-top: 0.5rem;
-`
-
-const ModalSelect = styled.select`
-    width: 150px;
-    height: 2.7rem;    
-    background-size: 20px;
-    padding: 5px 30px 5px 10px;
-    border-radius: 4px;
-    border: 1px solid #dee2e6;
-    outline: 0 none;
-    margin-top: 0.5rem;
-`
-
 function TodoCreate() {   
     const [modalOpen, setModalOpen] = useState(false);
     const [todo , setTodo] = useState({
@@ -108,13 +60,11 @@ function TodoCreate() {
         completed: false
     });
 
-    const {title, description, author, due_date, completed} = todo;
-
     const dispatch = useTodoDispatch();
     const todoService = TodoServices(dispatch); 
-    const nextId = useTodoNextId();
 
     const closeModal = () => {
+        initState();
         setModalOpen(false);
     };
 
@@ -150,7 +100,6 @@ function TodoCreate() {
 
             initState();
             setModalOpen(false);
-            nextId.current += 1;
             todoService.getData(dispatch);
         }    
 
@@ -158,46 +107,14 @@ function TodoCreate() {
 
     return (
         <>
-            <Modal open={ modalOpen } close={ closeModal } onSubmit={onSubmit} >
-                <ModalInput
-                    name="title"
-                    onChange={handleChange}
-                    value={title}
-                    placeholder={"제목을 입력해주세요."}
-                >
-                </ModalInput>
-                <ModalTextArea 
-                    name="description"
-                    onChange={handleChange}
-                    value={description}
-                    placeholder={"설명을 입력해주세요."}
-                >                    
-                </ModalTextArea>
-                <ModalInput 
-                    name="author"
-                    onChange={handleChange}
-                     value={author}
-                     placeholder={"저자를 입력해주세요."}
-                >                    
-                </ModalInput>
-                <ModalDatePicker 
-                    name="due_date"
-                    selected={due_date}
-                    onChange={handleChange} 
-                    dateFormat={"yyyy-MM-dd HH:mm:ss"}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={1}
-                    timeCaption="time"
-                    placeholderText={"날짜를 입력해주세요."}
-                ></ModalDatePicker>
-                <ModalSelect
-                    name="completed"
-                    onChange={handleChange}
-                    value={completed}>
-                    <option value="true">완료</option>
-                    <option value="false">미완료</option>
-                </ModalSelect>
+            <Modal 
+                open={ modalOpen } 
+                close={ closeModal } 
+                onSubmit={onSubmit} 
+                todo={todo} 
+                handleChange={handleChange} 
+                gubun={"C"} 
+            >                
             </Modal>
             <CircleButton onClick={onToggle} open={modalOpen}>
                 <MdAdd />

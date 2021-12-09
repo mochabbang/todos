@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
+import ModalTodo from './ModalTodo';
 
 const modalShow = keyframes`
     from {
@@ -95,7 +96,7 @@ const ModalFooterButton = styled(ModalButton)`
 
 const Modal = (props) => {
     // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-    const { open, close, onSubmit } = props;
+    const { open, close, onSubmit, todo, handleChange, gubun } = props;
 
     return (
         // 모달이 열릴 때 openModal 클래스가 생성된다.        
@@ -107,7 +108,10 @@ const Modal = (props) => {
                             <ModalHeaderButton onClick={close}>&times;</ModalHeaderButton>                            
                         </ModalHeader>
                         <ModalMain>
-                                {props.children}
+                                <ModalTodo 
+                                    todo={todo} 
+                                    handleChange={handleChange}
+                                    gubun={gubun}></ModalTodo>
                         </ModalMain>
                         <ModalFooter>
                             <ModalFooterButton onClick={onSubmit}> save </ModalFooterButton>
