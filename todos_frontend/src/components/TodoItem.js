@@ -116,13 +116,22 @@ function TodoItem({ todo }) {
         
     };
 
-    const handleChange = e => {
-        const {name, value} = e.target;  
+    const handleChange = e => {        
+        if (!e.target) {
+            setChangeTodo({
+                ...todo,
+                due_date: new Date(e)
+            });
+        }
+        else 
+        {
+            const {name, value} = e.target;  
 
-        setChangeTodo({
-            ...todo,
-            [name]: value
-        });
+            setChangeTodo({
+                ...todo,
+                [name]: value
+            });
+        }        
     }
     
     return (

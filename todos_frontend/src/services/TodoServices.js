@@ -3,8 +3,8 @@ import axios from 'axios';
 const getData = async(dispatch) => {
     dispatch({type: 'LOADING'});
     try {
-        const response = await axios.get('http://127.0.0.1:8080/api/todo/');
-              
+        const response = await axios.get('http://127.0.0.1:8080/api/todo/');         
+
         dispatch({type:'SUCCESS', todos: response.data});
     } catch(e) {
         dispatch({type: 'ERROR', error: e});
