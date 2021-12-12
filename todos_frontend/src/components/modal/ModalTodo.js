@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -52,7 +52,11 @@ const ModalDatePicker = styled(DatePicker)`
 function ModalTodo(props) {
     const {todo, handleChange, gubun} = props;    
     const {completed, title, description, author, due_date} = todo;   
-    //const [dueDate, setDueDate] = useState(new Date(due_date)
+    const [dueDate, setDueDate] = useState(new Date(due_date))
+
+    const changeDate = e => {
+        setDueDate(e);
+    }
 
     return (
         <>
@@ -80,9 +84,9 @@ function ModalTodo(props) {
             </ModalInput>
             <ModalDatePicker
             name="due_date"
-            value={new Date(due_date)}
-            selected={new Date(due_date)}
-            onChange={handleChange}
+            value={dueDate}
+            selected={dueDate}
+            onChange={() => { changeDate(); handleChange();}}
             dateFormat={"yyyy-MM-dd"}
             // showTimeSelect
             // timeFormat="HH:mm"
