@@ -63,9 +63,9 @@ const Title = styled.div`
 function TodoItem({ todo }) {            
     const dispatch = useTodoDispatch()
     const todoService = TodoServices(dispatch); 
-    const [modalOpen, setModalOpen] = useState(false);
-    const {id, completed, title} = todo;  
+    const [modalOpen, setModalOpen] = useState(false);     
     const [changeTodo, setChangeTodo] = useState(todo); 
+    const {id, completed, title} = changeTodo; 
     
 
     // 모달 팝업
@@ -116,7 +116,8 @@ function TodoItem({ todo }) {
         
     };
 
-    const handleChange = e => {        
+    const handleChange = e => {
+        
         if (!e.target) {
             setChangeTodo({
                 ...todo,
@@ -152,7 +153,7 @@ function TodoItem({ todo }) {
                 open={ modalOpen }
                 close={ closeModal }
                 onSubmit={onSubmit}
-                todo={todo} 
+                todo={changeTodo} 
                 handleChange={handleChange} 
                 gubun={"U"} 
             ></Modal>

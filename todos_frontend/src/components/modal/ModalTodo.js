@@ -52,11 +52,6 @@ const ModalDatePicker = styled(DatePicker)`
 function ModalTodo(props) {
     const {todo, handleChange, gubun} = props;    
     const {completed, title, description, author, due_date} = todo;   
-    const [dueDate, setDueDate] = useState(new Date(due_date))
-
-    const changeDate = e => {
-        setDueDate(e);
-    }
 
     return (
         <>
@@ -84,9 +79,9 @@ function ModalTodo(props) {
             </ModalInput>
             <ModalDatePicker
             name="due_date"
-            value={dueDate}
-            selected={dueDate}
-            onChange={() => { changeDate(); handleChange();}}
+            value={new Date(due_date)}
+            selected={new Date(due_date)}
+            onChange={handleChange}
             dateFormat={"yyyy-MM-dd"}
             // showTimeSelect
             // timeFormat="HH:mm"
