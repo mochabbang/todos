@@ -92,7 +92,7 @@ function TodoItem({ todo }) {
 
     // 저장 버튼
     const onSubmit = async() => {
-        const response = await todoService.putData(id, changeTodo);   
+        const response = await todoService.putData(id, todo);   
         
         if (response.status === 200) {
             alert("수정되었습니다.");          
