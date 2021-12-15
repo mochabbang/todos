@@ -92,7 +92,7 @@ function TodoItem({ todo }) {
 
     // 저장 버튼
     const onSubmit = async() => {
-        const response = await todoService.putData(id, todo);   
+        const response = await todoService.putData(id, changeTodo);   
         
         if (response.status === 200) {
             alert("수정되었습니다.");          
@@ -120,7 +120,7 @@ function TodoItem({ todo }) {
         
         if (!e.target) {
             setChangeTodo({
-                ...todo,
+                ...changeTodo,
                 due_date: new Date(e)
             });
         }
@@ -129,7 +129,7 @@ function TodoItem({ todo }) {
             const {name, value} = e.target;  
 
             setChangeTodo({
-                ...todo,
+                ...changeTodo,
                 [name]: value
             });
         }        

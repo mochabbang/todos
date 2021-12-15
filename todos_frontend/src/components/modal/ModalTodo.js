@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -82,11 +82,11 @@ function ModalTodo(props) {
             value={new Date(due_date)}
             selected={new Date(due_date)}
             onChange={handleChange}
-            dateFormat={"yyyy-MM-dd"}
-            // showTimeSelect
-            // timeFormat="HH:mm"
-            // timeIntervals={15}
-            // timeCaption="time"
+            dateFormat={"yyyy-MM-dd HH:mm:ss"}
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            timeCaption="time"
             ></ModalDatePicker>
             <ModalSelect
             onChange={handleChange}

@@ -96,7 +96,7 @@ const ModalFooterButton = styled(ModalButton)`
 
 const Modal = (props) => {
     // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-    const { open, close, onSubmit, todo, gubun } = props;
+    const { open, close, onSubmit, todo, handleChange, gubun } = props;
 
     return (
         // 모달이 열릴 때 openModal 클래스가 생성된다.        
@@ -110,6 +110,7 @@ const Modal = (props) => {
                         <ModalMain>
                                 <ModalTodo 
                                     todo={todo} 
+                                    handleChange={handleChange}
                                     gubun={gubun}></ModalTodo>
                         </ModalMain>
                         <ModalFooter>
