@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+const headers = {
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+}
+
 const getData = async(dispatch) => {
     dispatch({type: 'LOADING'});
     try {
@@ -12,12 +17,6 @@ const getData = async(dispatch) => {
 }
 
 const putData = async(dispatch, id, todo) => {   
-
-    const headers = {
-        'Content-Type': 'application/json',
-        'Accept': '*/*'
-    }
-
     try {
         const response = await axios.put(`http://127.0.0.1:8080/api/todo/${id}/`, { 
             ...todo
@@ -31,12 +30,6 @@ const putData = async(dispatch, id, todo) => {
 }
 
 const deleteData = async(dispatch, id) => {   
-
-    const headers = {
-        'Content-Type': 'application/json',
-        'Accept': '*/*'
-    }
-
     try {
         const response = await axios.delete(`http://127.0.0.1:8080/api/todo/${id}/`, headers);
 
@@ -48,12 +41,6 @@ const deleteData = async(dispatch, id) => {
 }
 
 const postData = async(dispatch, todo) => {   
-
-    const headers = {
-        'Content-Type': 'application/json',
-        'Accept': '*/*'
-    }
-
     try {
         const response = await axios.post(`http://127.0.0.1:8080/api/todo/`, todo, headers);
 
