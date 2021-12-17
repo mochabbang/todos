@@ -92,6 +92,9 @@ function TodoItem({ todo }) {
 
     // 저장 버튼
     const onSubmit = async() => {
+
+        if (!checkValidation()) return false;
+
         const response = await todoService.putData(id, changeTodo);   
         
         if (response.status === 200) {
@@ -133,6 +136,25 @@ function TodoItem({ todo }) {
                 [name]: value
             });
         }        
+    }
+
+    const checkValidation = () => {
+        if (changeTodo.title === '') {
+            alert('제목을 입력해주세요!');
+            return false;
+        }
+
+        if (changeTodo.author === '') {
+            alert('작성자를 입력해주세요!');
+            return false;
+        }
+
+        if(changeTodo.due_date === '') {
+            alert('기간을 선택해주세요');
+            return false;
+        }
+
+        return true;
     }
     
     return (

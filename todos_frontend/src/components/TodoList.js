@@ -17,7 +17,7 @@ function TodoList() {
 
     useEffect(() => {
         todoService.getData(dispatch);
-
+        // eslint-disable-next-line
     }, [dispatch]);
 
     if (!todos) return null

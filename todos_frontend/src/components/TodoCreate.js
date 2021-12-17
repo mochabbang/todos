@@ -71,11 +71,21 @@ function TodoCreate() {
     const onToggle = () => setModalOpen(!modalOpen);   
     
     const handleChange = e => {
-        const {name ,value} = e.target;
-        setTodo({
-            ...todo,
-            [name]: value
-        });
+        if (!e.target) {
+            setTodo({
+                ...todo,
+                due_date: new Date(e)
+            });
+        }
+        else 
+        {
+            const {name, value} = e.target;  
+
+            setTodo({
+                ...todo,
+                [name]: value
+            });
+        }  
     }
 
     const initState = () => {
@@ -91,6 +101,8 @@ function TodoCreate() {
     const onSubmit = async (e) => {
         e.preventDefault();
         
+        if(!checkValidation()) return false;
+
         if (window.confirm("등록하시겠습니까?")) {
             const response = await todoService.postData(todo);
 
@@ -101,8 +113,26 @@ function TodoCreate() {
             initState();
             setModalOpen(false);
             todoService.getData(dispatch);
-        }    
+        }
+    }
 
+    const checkValidation = () => {
+        if (todo.title === '') {
+            alert('제목을 입력해주세요!');
+            return false;
+        }
+
+        if (todo.author === '') {
+            alert('작성자를 입력해주세요!');
+            return false;
+        }
+
+        if(todo.due_date === '') {
+            alert('기간을 선택해주세요');
+            return false;
+        }
+
+        return true;
     }
 
     return (
